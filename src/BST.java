@@ -67,9 +67,7 @@ public class BST<T extends Comparable> implements Seznam<T> {
             } else if (node.desni == null) {
                 return node.levi;
             } else {
-                T min = findMin(node.desni);
-                node.vrednost = min;
-                node.desni = delete(min, node.desni);
+                node.vrednost = deleteMin(node, node.desni);
             }
         }
         return node;
@@ -86,11 +84,17 @@ public class BST<T extends Comparable> implements Seznam<T> {
         return 1 + max(getDepth(node.levi), getDepth(node.desni));
     }
 
-    private T findMin(ElementBST node) {
-        while (node.levi != null) node = node.levi;
+    private T deleteMin(ElementBST parent, ElementBST node) {
+        while (node.levi != null) {
+            parent = node;
+            node = node.levi;
+        }
+
+        if (parent.desni == node) parent.desni = node.desni;
+        else parent.levi = node.levi;
+
         return node.vrednost;
     }
-
 
     @Override
     public void add(T e) {
