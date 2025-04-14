@@ -1,12 +1,15 @@
 import org.junit.jupiter.api.*;
 
+import java.security.PublicKey;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PrioritetnaVrstaTest {
 
     private PrioritetnaVrsta<String> pv;
 
-    public PrioritetnaVrstaTest() {}
+    public PrioritetnaVrstaTest() {
+    }
 
     @BeforeAll
     public static void setUpClass() throws Exception {
@@ -18,18 +21,14 @@ public class PrioritetnaVrstaTest {
 
     @BeforeEach
     public void setUp() {
-        pv = new PrioritetnaVrsta<>(10);
+        pv = new PrioritetnaVrsta<>();
     }
 
     @AfterEach
     public void tearDown() {
     }
 
-
-    /** Test metod razreda <PrioritetnaVrsta> */
-
     // testi dodajanja
-
     @Test
     public void testAddOne() {
         pv.add("Test");
@@ -50,10 +49,11 @@ public class PrioritetnaVrstaTest {
     }
 
     // testi brisanja
-
     @Test
     public void testRemoveFirstEmpty() {
-        assertThrows(java.util.NoSuchElementException.class, ()->{pv.removeFirst();});
+        assertThrows(java.util.NoSuchElementException.class, () -> {
+            pv.removeFirst();
+        });
     }
 
     @Test
@@ -80,7 +80,9 @@ public class PrioritetnaVrstaTest {
 
     @Test
     public void testGetFirstEmpty() {
-        assertThrows(java.util.NoSuchElementException.class, ()->{pv.getFirst();});
+        assertThrows(java.util.NoSuchElementException.class, () -> {
+            pv.getFirst();
+        });
     }
 
     @Test
@@ -176,4 +178,80 @@ public class PrioritetnaVrstaTest {
         pv.add("Test2");
         assertFalse(pv.isEmpty());
     }
+
+    @Test
+    public void testExistsOnEmpty() {
+        assertFalse(pv.exists("Test"));
+    }
+
+    @Test
+    public void testExistsBasicExists() {
+        pv.add("Test");
+        assertTrue(pv.exists("Test"));
+    }
+
+    @Test
+    public void testExistsBasicNotExists() {
+        pv.add("Test1");
+        assertFalse(pv.exists("Test"));
+    }
+
+    @Test
+    public void testExistsMultipleWordsExists() {
+        pv.add("Test1");
+        pv.add("Test2");
+        pv.add("Test3");
+        assertTrue(pv.exists("Test2"));
+        assertTrue(pv.exists("Test3"));
+        assertTrue(pv.exists("Test1"));
+    }
+
+    @Test
+    public void testExistsMultipleWordsNotExists() {
+        pv.add("Test1");
+        pv.add("Test2");
+        pv.add("Test3");
+        assertFalse(pv.exists("Test4"));
+    }
+
+    @Test
+    public void testRemoveOnEmpty() {
+        assertThrows(java.util.NoSuchElementException.class, () -> {
+            pv.remove("Test");
+        });
+    }
+
+    @Test
+    public void testRemoveNonExistent() {
+        pv.add("Test1");
+        pv.add("Test2");
+        pv.add("Test3");
+        assertNull(pv.remove("NonExistent"));
+    }
+
+    @Test
+    public void testRemoveExistentBasic() {
+        pv.add("Test1");
+
+        String removed = pv.remove("Test1");
+        assertEquals("Test1", removed);
+        assertFalse(pv.exists("Test1"));
+        assertEquals(0, pv.size());
+    }
+
+    @Test
+    public void testRemoveExistentMultiple() {
+        pv.add("Test1");
+        pv.add("Test2");
+        pv.add("Test3");
+        pv.add("Test4");
+        pv.add("Test5");
+        pv.add("Test6");
+
+        String removed = pv.remove("Test6");
+        assertEquals("Test6", removed);
+        assertFalse(pv.exists("Test6"));
+        assertEquals(5, pv.size());
+    }
+
 }

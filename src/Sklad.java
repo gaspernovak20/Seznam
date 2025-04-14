@@ -34,6 +34,7 @@ public class Sklad<T> implements Seznam<T> {
         vrh = vrh.vezava;
         return vr;
     }
+
     public T top() {
         if (vrh == null) throw new NoSuchElementException();
         return vrh.vrednost;
@@ -68,6 +69,42 @@ public class Sklad<T> implements Seznam<T> {
     }
 
     @Override
+    public T remove(T e) {
+        if (this.isEmpty()) throw new
+                java.util.NoSuchElementException();
+
+        if (vrh.vrednost.equals(e)) {
+            T removed = (T) vrh.vrednost;
+            vrh = vrh.vezava;
+            return removed;
+        }
+        Element<T> prevEl = vrh;
+        Element<T> currEl = prevEl.vezava;
+
+        while (currEl != null) {
+            if (currEl.vrednost.equals(e)) {
+                T removed = (T) currEl.vrednost;
+                prevEl.vezava = currEl.vezava;
+                return removed;
+            }
+            prevEl = currEl;
+            currEl = currEl.vezava;
+        }
+
+        return null;
+    }
+
+    @Override
+    public boolean exists(T e) {
+        Element<T> temp = vrh;
+        while (temp != null) {
+            if (temp.vrednost.equals(e)) return true;
+            temp = temp.vezava;
+        }
+        return false;
+    }
+
+    @Override
     public int size() {
         int result = 0;
         Element<T> temp = vrh;
@@ -96,7 +133,6 @@ public class Sklad<T> implements Seznam<T> {
     @Override
     public int depth() {
         return size();
-//        TODO: size namesto depth?
     }
 
 }

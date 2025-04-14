@@ -38,10 +38,8 @@ class SkladTest {
     }
 
     @Test
-    public void testPopOnEmptyStack() {
-        assertThrows(java.util.NoSuchElementException.class, () -> {
-            instance.pop();
-        });
+    public void testRemoveFirstOnEmptyStack() {
+        assertThrows(java.util.NoSuchElementException.class, () -> instance.removeFirst());
     }
 
     @Test
@@ -56,30 +54,28 @@ class SkladTest {
     }
 
     @Test
-    public void testTopOnEmptyStack() {
-        assertThrows(NoSuchElementException.class, () -> {
-            instance.top();
-        });
+    public void testGetFirstOnEmptyStack() {
+        assertThrows(NoSuchElementException.class, () -> instance.getFirst());
     }
 
     @Test
-    public void testTopWithOneElement() {
+    public void testGetFirstWithOneElement() {
         instance.push("a");
-        assertEquals(instance.top(), "a");
+        assertEquals(instance.getFirst(), "a");
         instance.pop();
         assertTrue(instance.isEmpty());
     }
 
     @Test
-    public void testTopWithThreeElements() {
+    public void testGetFirstWithThreeElements() {
         instance.push("a");
         instance.push("b");
         instance.push("c");
-        assertEquals(instance.top(), "c");
+        assertEquals(instance.getFirst(), "c");
         instance.pop();
-        assertEquals(instance.top(), "b");
+        assertEquals(instance.getFirst(), "b");
         instance.pop();
-        assertEquals(instance.top(), "a");
+        assertEquals(instance.getFirst(), "a");
         instance.pop();
         assertTrue(instance.isEmpty());
     }
@@ -114,9 +110,7 @@ class SkladTest {
     @Test
     public void testSearchEmpty() {
         Sklad<String> instance = new Sklad<>();
-        assertThrows(NoSuchElementException.class, () -> {
-            instance.search("a");
-        });
+        assertThrows(NoSuchElementException.class, () -> instance.search("a"));
     }
 
     @Test
@@ -158,9 +152,7 @@ class SkladTest {
 
     @Test
     public void testIsTopEmpty() {
-        assertThrows(NoSuchElementException.class, () -> {
-            instance.isTop("a");
-        });
+        assertThrows(NoSuchElementException.class, () -> instance.isTop("a"));
     }
 
     @Test
@@ -195,6 +187,81 @@ class SkladTest {
         assertEquals(instance.search("a"), 2);
         assertEquals(instance.search("b"), 1);
         assertEquals(instance.search("c"), 0);
+    }
+
+    @Test
+    public void testExistsOnEmpty() {
+        assertFalse(instance.exists("a"));
+    }
+
+    @Test
+    public void testExistsBasicExists() {
+        instance.push("a");
+        assertTrue(instance.exists("a"));
+    }
+
+    @Test
+    public void testExistsBasicNotExists() {
+        instance.push("a");
+        assertFalse(instance.exists("b"));
+    }
+
+    @Test
+    public void testExistsMultipleWordsExists() {
+        instance.push("a");
+        instance.push("b");
+        instance.push("c");
+        assertTrue(instance.exists("c"));
+        assertTrue(instance.exists("b"));
+        assertTrue(instance.exists("a"));
+    }
+
+    @Test
+    public void testExistsMultipleWordsNotExists() {
+        instance.push("a");
+        instance.push("b");
+        instance.push("c");
+        assertFalse(instance.exists("d"));
+    }
+
+    @Test
+    public void testRemoveOnEmpty() {
+        assertThrows(NoSuchElementException.class, () -> instance.remove("a"));
+    }
+
+    @Test
+    public void testRemoveBasicExists() {
+        instance.add("a");
+        assertEquals(instance.remove("a"), "a");
+        assertTrue(instance.isEmpty());
+    }
+
+    @Test
+    public void testRemoveBasicNotExists() {
+        instance.push("a");
+        assertNull(instance.remove("b"));
+        assertEquals(instance.size(), 1);
+    }
+
+    @Test
+    public void testRemoveMultipleWordsExists() {
+        instance.add("a");
+        instance.add("b");
+        instance.add("c");
+        assertEquals(instance.remove("b"), "b");
+        assertEquals(instance.search("c"), 0);
+        assertEquals(instance.search("a"), 1);
+        assertEquals(instance.remove("a"), "a");
+        assertEquals(instance.search("c"), 0);
+    }
+
+    @Test
+    public void testRemoveMultipleWordsNotExists() {
+        instance.push("a");
+        instance.push("b");
+        instance.push("c");
+        assertNull(instance.remove("d"));
+        assertEquals(instance.size(), 3);
     }
 
 }

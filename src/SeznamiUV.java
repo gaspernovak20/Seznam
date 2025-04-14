@@ -1,13 +1,15 @@
-import java.util.PriorityQueue;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class SeznamiUV {
-    private Sklad<String> sklad;
-    private PrioritetnaVrsta<String> vrsta;
+    HashMap<String, Seznam<String>> seznami;
+    Seznam<String> seznam;
 
     public SeznamiUV() {
-        sklad = new Sklad<String>();
-        vrsta = new PrioritetnaVrsta<String>();
+        seznami = new HashMap<>();
+        seznami.put("sk", new Sklad<>());
+        seznami.put("pv", new PrioritetnaVrsta<>());
+        seznami.put("bst", new BST<>());
     }
 
     public String processInput(String input) {
@@ -17,7 +19,13 @@ public class SeznamiUV {
         StringBuilder arg = new StringBuilder();
 
         switch (token) {
-            case "s_add":
+            case "use":
+                if (sc.hasNext()) {
+                    seznam = seznami.get(sc.next());
+                    if (seznam == null) result = "Error: please specify a correct data structure type (pv, sk, bst)";
+                } else result = "Error: please specify a data structure type (pv, sk, bst)";
+                break;
+            case "add":
                 if (sc.hasNext()) {
                     arg.append(sc.next());
                     if (arg.charAt(0) == '"') {
@@ -27,61 +35,56 @@ public class SeznamiUV {
                         if (arg.charAt(arg.length() - 1) == '"') {
                             arg.deleteCharAt(0);
                             arg.deleteCharAt(arg.length() - 1);
-                            sklad.push(arg.toString());
+                            seznam.add(arg.toString());
                         } else {
                             result = "Error: Wrong string";
                         }
 
-                    } else
-                        sklad.push(arg.toString());
+                    } else seznam.add(arg.toString());
 
-                } else
-                    result = "Error: please specify a string";
+                } else result = "Error: please specify a string";
                 break;
-            case "s_removeFirst":
-                if (!sklad.isEmpty())
-                    result = sklad.pop();
-                else
-                    result = "Error: stack is empty";
+            case "removeFirst":
+                if (!seznam.isEmpty()) result = seznam.removeFirst();
+                else result = "Error: Data structure is empty";
                 break;
-            case "s_reset":
-                while (!sklad.isEmpty()) {
-                    sklad.pop();
-                }
+            case "reset":
+                while (!seznam.isEmpty()) seznam.removeFirst();
                 break;
-            case "s_size":
-                result = String.format("%d", sklad.size());
+            case "size":
+                result = String.format("%d", seznam.size());
                 break;
-            case "pq_add": // brez elementov z več nizi “”
+            case "exists":
                 if (sc.hasNext()) {
-                    String val = sc.next();
-                    vrsta.add(val);
-                } else
-                    result = "Error: please specify a string";
+                    if (seznam.isEmpty()) {
+                        result = "Data structure is empty";
+                    } else {
+                        result = seznam.exists(sc.next()) ? "Element exists in data structure" : "Element does not exist in data structure";
+                    }
+                } else result = "Please specify a string";
                 break;
-            case "pq_remove_first":
-                if (!vrsta.isEmpty())
-                    result = vrsta.removeFirst();
-                else
-                    result = "Error: priority queue is empty";
+            case "get_first":
+                if (!seznam.isEmpty()) result = seznam.getFirst();
+                else result = "Error: Data structure is empty";
                 break;
-            case "pq_get_first":
-                if (!vrsta.isEmpty())
-                    result = vrsta.getFirst();
-                else
-                    result = "Error: priority queue is empty";
+            case "depth":
+                result = String.format("%d", seznam.depth());
                 break;
-            case "pq_size":
-                result = Integer.toString(vrsta.size());
+            case "isEmpty":
+                if (seznam.isEmpty()) result = "Data structure is empty";
+                else result = "Data structure is not empty";
                 break;
-            case "pq_depth":
-                result = Integer.toString(vrsta.depth());
+            case "remove":
+                if (sc.hasNext()) {
+                    if (seznam.isEmpty()) result = "Data structure is empty";
+                    else {
+                        arg.append(sc.next());
+                        if (seznam.exists(arg.toString())){
+                            result = seznam.remove(arg.toString());
+                        }else result = "Element not found";
+                    }
+                } else result = "Please specify a string";
                 break;
-            case "pq_isEmpty":
-                if (vrsta.isEmpty()) result = "Priority queue is empty";
-                else result = "Priority queue is not empty";
-                break;
-
         }
         return result;
     }

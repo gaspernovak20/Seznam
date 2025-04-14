@@ -1,3 +1,4 @@
+
 public class PrioritetnaVrsta<T extends Comparable> implements Seznam<T> {
     private Object[] heap;
     private int end = 0;
@@ -94,5 +95,33 @@ public class PrioritetnaVrsta<T extends Comparable> implements Seznam<T> {
     @Override
     public boolean isEmpty() {
         return end == 0;
+    }
+
+    @Override
+    public T remove(T e) {
+        if (this.isEmpty()) throw new
+                java.util.NoSuchElementException();
+        if (this.exists(e)) {
+            int eltIdx = end - 1;
+            while (eltIdx >= 0) {
+                T elt = (T) heap[eltIdx];
+                if (elt.equals(e)) {
+                    swap(eltIdx, --end);
+                    bubbleDown(0);
+                    return elt;
+                }
+                eltIdx--;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean exists(T e) {
+        for (int i = 0; i < end; i++) {
+            Object elt = heap[i];
+            if (elt.equals(e)) return true;
+        }
+        return false;
     }
 }

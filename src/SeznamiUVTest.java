@@ -1,4 +1,6 @@
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static java.time.Duration.ofMillis;
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,161 +25,201 @@ class SeznamiUVTest {
     }
 
     @Test
-    public void testStackPushBasic() {
-        System.out.println("testPushBasic");
-        assertEquals("OK", uv.processInput("s_add Test1"));
+    public void testUseWrongArgument(){
+        assertEquals("Error: please specify a correct data structure type (pv, sk, bst)", uv.processInput("use none"));
     }
 
     @Test
-    public void testStackPushMultipleWords() {
-        System.out.println("testPushMultipleWords");
-        assertEquals("OK", uv.processInput("s_add \"Test with multiple words\""));
-        assertEquals("1", uv.processInput("s_size"));
+    public void testUseNoArgument(){
+        assertEquals("Error: please specify a data structure type (pv, sk, bst)", uv.processInput("use"));
     }
 
-    @Test
-    public void testStackPopBasic() {
-        System.out.println("testPopBasic");
-        assertEquals("OK", uv.processInput("s_add Test1"));
-        assertEquals("Test1", uv.processInput("s_removeFirst"));
+
+    //    test Add
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testAddBasic(String seznam) {
+        uv.processInput("use " + seznam);
+        assertEquals("OK", uv.processInput("add Test1"));
     }
 
-    @Test
-    public void testStackPopMultipleWords() {
-        System.out.println("testPopMultipleWords");
-        assertEquals("OK", uv.processInput("s_add \"Test with multiple words\""));
-        assertEquals("1", uv.processInput("s_size"));
-        assertEquals("Test with multiple words", uv.processInput("s_removeFirst"));
-        assertEquals("0", uv.processInput("s_size"));
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testAddMultipleWords(String seznam) {
+        uv.processInput("use " + seznam);
+        assertEquals("OK", uv.processInput("add \"Test with multiple words\""));
+        assertEquals("1", uv.processInput("size"));
     }
 
-    @Test
-    public void testStackPopNothing() {
-        System.out.println("testPopNothing");
-        assertEquals("Error: stack is empty", uv.processInput("s_removeFirst"));
+    //  test removeFirst
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testRemoveFirstOnEmpty(String seznam) {
+        uv.processInput("use " + seznam);
+        assertEquals("Error: Data structure is empty", uv.processInput("removeFirst"));
     }
 
-    @Test
-    public void testStackResetOnEmpty() {
-        System.out.println("testResetOnEmpty");
-        assertEquals("OK", uv.processInput("s_reset"));
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testRemoveFirstBasic(String seznam) {
+        uv.processInput("use " + seznam);
+        assertEquals("OK", uv.processInput("add Test1"));
+        assertEquals("Test1", uv.processInput("removeFirst"));
     }
 
-    @Test
-    public void testStackResetOnFull() {
-        System.out.println("testResetOnFull");
-        assertEquals("OK", uv.processInput("s_add Test"));
-        assertEquals("OK", uv.processInput("s_reset"));
-        assertEquals("Error: stack is empty", uv.processInput("s_removeFirst"));
+
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testRemoveFirstMultipleWords(String seznam) {
+        uv.processInput("use " + seznam);
+        assertEquals("OK", uv.processInput("add \"Test with multiple words\""));
+        assertEquals("1", uv.processInput("size"));
+        assertEquals("Test with multiple words", uv.processInput("removeFirst"));
+        assertEquals("0", uv.processInput("size"));
     }
 
-    @Test
-    public void testStackCountOne() {
-        System.out.println("testCountOne");
-        assertEquals("OK", uv.processInput("s_add Test"));
-        assertTimeoutPreemptively(ofMillis(100), () ->
-        {
-            uv.processInput("s_size");
+    //  test Reset
+
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testResetOnEmpty(String seznam) {
+        uv.processInput("use " + seznam);
+        assertEquals("OK", uv.processInput("reset"));
+    }
+
+
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testResetOnFull(String seznam) {
+        uv.processInput("use " + seznam);
+        assertEquals("OK", uv.processInput("add Test"));
+        assertEquals("OK", uv.processInput("reset"));
+        assertEquals("Error: Data structure is empty", uv.processInput("removeFirst"));
+    }
+
+
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testAddCountOne(String seznam) {
+        uv.processInput("use " + seznam);
+        assertEquals("OK", uv.processInput("add Test"));
+        assertTimeoutPreemptively(ofMillis(100), () -> {
+            uv.processInput("size");
         });
     }
 
-    @Test
-    public void testHeapAddNothing() {
-        System.out.println("testHeapAddNothing");
-        assertEquals("Error: please specify a string", uv.processInput("pq_add"));
+    //    test Exists
+
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testExistsOnEmpty(String seznam) {
+        uv.processInput("use " + seznam);
+        assertEquals("Data structure is empty", uv.processInput("exists Test1"));
     }
 
 
-    @Test
-    public void testHeapAddBasic() {
-        System.out.println("testHeapAddBasic");
-        assertEquals("OK", uv.processInput("pq_add Test1"));
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testExistsNothing(String seznam) {
+        uv.processInput("use " + seznam);
+        assertEquals("Please specify a string", uv.processInput("exists"));
     }
 
-    @Test
-    public void testHeapRemoveFirstOnEmpty() {
-        System.out.println("testHeapRemoveFirstOnEmpty");
-        assertEquals("Error: priority queue is empty", uv.processInput("pq_remove_first"));
+
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testExistsExistsBasic(String seznam) {
+        uv.processInput("use " + seznam);
+        uv.processInput("add test1");
+        assertEquals("Element exists in data structure", uv.processInput("exists test1"));
     }
 
-    @Test
-    public void testHeapRemoveFirstMultipleWords() {
-        System.out.println("testHeapRemoveFirstMultipleWords");
-        uv.processInput("pq_add Test1");
-        uv.processInput("pq_add Test5");
-        uv.processInput("pq_add Test2");
-        uv.processInput("pq_add Test4");
-        uv.processInput("pq_add Test3");
-        assertEquals("Test5", uv.processInput("pq_remove_first"));
-        assertEquals("Test4", uv.processInput("pq_remove_first"));
-        assertEquals("Test3", uv.processInput("pq_remove_first"));
-        assertEquals("Test2", uv.processInput("pq_remove_first"));
-        assertEquals("Test1", uv.processInput("pq_remove_first"));
+
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testExistsExistsMultiple(String seznam) {
+        uv.processInput("use " + seznam);
+        uv.processInput("add test1");
+        uv.processInput("add test2");
+        uv.processInput("add test3");
+        assertEquals("Element exists in data structure", uv.processInput("exists test3"));
     }
 
-    @Test
-    public void testHeapGetFirstOnEmpty() {
-        System.out.println("testHeapGetFirstOnEmpty");
-        assertEquals("Error: priority queue is empty", uv.processInput("pq_get_first"));
+
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testExistsDoesntExistsBasic(String seznam) {
+        uv.processInput("use " + seznam);
+        uv.processInput("add test1");
+        assertEquals("Element does not exist in data structure", uv.processInput("exists test2"));
     }
 
-    @Test
-    public void testHeapGetFirstMultipleWords() {
-        System.out.println("testHeapGetFirstMultipleWords");
-        uv.processInput("pq_add Test1");
-        uv.processInput("pq_add Test5");
-        uv.processInput("pq_add Test2");
-        uv.processInput("pq_add Test4");
-        assertEquals("Test5", uv.processInput("pq_get_first"));
+
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testExistsDoesntExistsMultiple(String seznam) {
+        uv.processInput("use " + seznam);
+        uv.processInput("add test1");
+        uv.processInput("add test2");
+        uv.processInput("add test3");
+        assertEquals("Element does not exist in data structure", uv.processInput("exists test4"));
     }
 
-    @Test
-    public void testHeapSizeOnEmpty() {
-        System.out.println("testHeapSizeOnEmpty");
-        assertEquals("0", uv.processInput("pq_size"));
+    //    test Remove
+
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testRemoveOnEmpty(String seznam) {
+        uv.processInput("use " + seznam);
+        assertEquals("Data structure is empty", uv.processInput("remove test4"));
     }
 
-    @Test
-    public void testHeapSizeMultipleWords() {
-        System.out.println("testHeapSizeMultipleWords");
-        uv.processInput("pq_add Test1");
-        uv.processInput("pq_add Test5");
-        uv.processInput("pq_add Test2");
-        uv.processInput("pq_add Test4");
-        assertEquals("4", uv.processInput("pq_size"));
+
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testRemoveNothing(String seznam) {
+        uv.processInput("use " + seznam);
+        assertEquals("Please specify a string", uv.processInput("remove"));
     }
 
-    @Test
-    public void testHeapDepthOnEmpty() {
-        System.out.println("testHeapDepthOnEmpty");
-        assertEquals("0", uv.processInput("pq_depth"));
+
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testRemoveFoundBasic(String seznam) {
+        uv.processInput("use " + seznam);
+        uv.processInput("add test1");
+        assertEquals("test1", uv.processInput("remove test1"));
     }
 
-    @Test
-    public void testHeapDepthMultipleWords() {
-        System.out.println("testHeapSizeMultipleWords");
-        uv.processInput("pq_add Test1");
-        uv.processInput("pq_add Test5");
-        uv.processInput("pq_add Test2");
-        uv.processInput("pq_add Test4");
-        assertEquals("3", uv.processInput("pq_depth"));
+
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testRemoveFoundMultiple(String seznam) {
+        uv.processInput("use " + seznam);
+        uv.processInput("add test1");
+        uv.processInput("add test2");
+        uv.processInput("add test3");
+        assertEquals("test3", uv.processInput("remove test3"));
     }
 
-    @Test
-    public void testHeapIsEmptyOnEmpty() {
-        System.out.println("testHeapIsEmptyOnEmpty");
-        assertEquals("Priority queue is empty", uv.processInput("pq_isEmpty"));
+
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testRemoveNotFoundBasic(String seznam) {
+        uv.processInput("use " + seznam);
+        uv.processInput("add test1");
+        assertEquals("Element not found", uv.processInput("remove test2"));
     }
 
-    @Test
-    public void testHeapIsEmptyMultipleWords() {
-        System.out.println("testHeapIsEmptyMultipleWords");
-        uv.processInput("pq_add Test1");
-        uv.processInput("pq_add Test5");
-        uv.processInput("pq_add Test2");
-        uv.processInput("pq_add Test4");
-        assertEquals("Priority queue is not empty", uv.processInput("pq_isEmpty"));
-    }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testRemoveNotFoundMultiple(String seznam) {
+        uv.processInput("use " + seznam);
+        uv.processInput("add test1");
+        uv.processInput("add test2");
+        uv.processInput("add test3");
+        assertEquals("Element not found", uv.processInput("remove test4"));
+    }
 
 }
