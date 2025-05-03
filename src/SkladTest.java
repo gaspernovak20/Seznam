@@ -264,4 +264,22 @@ class SkladTest {
         assertEquals(instance.size(), 3);
     }
 
+    @Test
+    public void testDepthOnEmptyStack() {
+        assertEquals(instance.depth(), 0);
+    }
+
+    @Test
+    public void testDepthOneElement() {
+        instance.push("a");
+        assertEquals(instance.depth(), 1);
+    }
+
+    @Test
+    public void testDepthThreeElements() {
+        instance.push("a");
+        instance.push("b");
+        instance.push("c");
+        assertEquals(instance.depth(), 3);
+    }
 }

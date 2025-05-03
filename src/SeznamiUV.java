@@ -63,7 +63,7 @@ public class SeznamiUV {
                     }
                 } else result = "Please specify a string";
                 break;
-            case "get_first":
+                case "getFirst":
                 if (!seznam.isEmpty()) result = seznam.getFirst();
                 else result = "Error: Data structure is empty";
                 break;

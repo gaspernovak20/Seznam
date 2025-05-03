@@ -25,12 +25,12 @@ class SeznamiUVTest {
     }
 
     @Test
-    public void testUseWrongArgument(){
+    public void testUseWrongArgument() {
         assertEquals("Error: please specify a correct data structure type (pv, sk, bst)", uv.processInput("use none"));
     }
 
     @Test
-    public void testUseNoArgument(){
+    public void testUseNoArgument() {
         assertEquals("Error: please specify a data structure type (pv, sk, bst)", uv.processInput("use"));
     }
 
@@ -43,12 +43,28 @@ class SeznamiUVTest {
         assertEquals("OK", uv.processInput("add Test1"));
     }
 
+    //    test Add
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testAddNoArgument(String seznam) {
+        uv.processInput("use " + seznam);
+        assertEquals("Error: please specify a string", uv.processInput("add"));
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {"sk", "pv", "bst"})
     public void testAddMultipleWords(String seznam) {
         uv.processInput("use " + seznam);
         assertEquals("OK", uv.processInput("add \"Test with multiple words\""));
         assertEquals("1", uv.processInput("size"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testAddMultipleWordsWrong(String seznam) {
+        uv.processInput("use " + seznam);
+        assertEquals("Error: Wrong string", uv.processInput("add \"Test with multiple words"));
+        assertEquals("0", uv.processInput("size"));
     }
 
     //  test removeFirst
@@ -77,7 +93,6 @@ class SeznamiUVTest {
         assertEquals("Test with multiple words", uv.processInput("removeFirst"));
         assertEquals("0", uv.processInput("size"));
     }
-
     //  test Reset
 
     @ParameterizedTest
@@ -165,8 +180,119 @@ class SeznamiUVTest {
         assertEquals("Element does not exist in data structure", uv.processInput("exists test4"));
     }
 
-    //    test Remove
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testGetFirstOnEmpty(String seznam) {
+        uv.processInput("use " + seznam);
+        assertEquals("Error: Data structure is empty", uv.processInput("getFirst"));
+    }
 
+
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testGetFirstBasic(String seznam) {
+        uv.processInput("use " + seznam);
+        uv.processInput("add test1");
+        assertEquals("test1", uv.processInput("getFirst"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv"})
+    public void testSKPVGetFirstMultiple(String seznam) {
+        uv.processInput("use " + seznam);
+        uv.processInput("add test2");
+        uv.processInput("add test1");
+        uv.processInput("add test3");
+        uv.processInput("add test4");
+        assertEquals("test4", uv.processInput("getFirst"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"bst"})
+    public void testBSTGetFirstMultiple(String seznam) {
+        uv.processInput("use " + seznam);
+        uv.processInput("add test2");
+        uv.processInput("add test1");
+        uv.processInput("add test3");
+        uv.processInput("add test4");
+        assertEquals("test2", uv.processInput("getFirst"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testIsEmptyOnEmpty(String seznam) {
+        uv.processInput("use " + seznam);
+        assertEquals("Data structure is empty", uv.processInput("isEmpty"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testIsEmptyBasic(String seznam) {
+        uv.processInput("use " + seznam);
+        uv.processInput("add test1");
+        assertEquals("Data structure is not empty", uv.processInput("isEmpty"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testIsEmptyMultiple(String seznam) {
+        uv.processInput("use " + seznam);
+        uv.processInput("add test1");
+        uv.processInput("add test2");
+        uv.processInput("add test3");
+        assertEquals("Data structure is not empty", uv.processInput("isEmpty"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testDepthOnEmpty(String seznam) {
+        uv.processInput("use " + seznam);
+        assertEquals("0", uv.processInput("depth"));
+    }
+
+
+    @ParameterizedTest
+    @ValueSource(strings = {"pv", "bst"})
+    public void testDepthBasic(String seznam) {
+        uv.processInput("use " + seznam);
+        uv.processInput("add test1");
+        assertEquals("1", uv.processInput("depth"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"bst"})
+    public void testBSTDepthMultipleLeft(String seznam) {
+        uv.processInput("use " + seznam);
+        uv.processInput("add d");
+        uv.processInput("add c");
+        uv.processInput("add b");
+        uv.processInput("add a");
+        assertEquals("4", uv.processInput("depth"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"bst"})
+    public void testBSTDepthMultipleRight(String seznam) {
+        uv.processInput("use " + seznam);
+        uv.processInput("add a");
+        uv.processInput("add b");
+        uv.processInput("add c");
+        uv.processInput("add d");
+        assertEquals("4", uv.processInput("depth"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"pv"})
+    public void testPQDepthMultiple(String seznam) {
+        uv.processInput("use " + seznam);
+        uv.processInput("add a");
+        uv.processInput("add b");
+        uv.processInput("add c");
+        uv.processInput("add d");
+        assertEquals("3", uv.processInput("depth"));
+    }
+
+    //    test Remove
     @ParameterizedTest
     @ValueSource(strings = {"sk", "pv", "bst"})
     public void testRemoveOnEmpty(String seznam) {
