@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.*;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -282,4 +283,25 @@ class SkladTest {
         instance.push("c");
         assertEquals(instance.depth(), 3);
     }
+
+
+    @Test
+    void testAsListOnEmpty() {
+        List<String> result = instance.asList();
+
+        // pričakujemo vrstni red: 'c', 'b', 'a'
+        assertEquals(List.of(), result);
+    }
+
+    @Test
+    void testAsListBasic() {
+        instance.push("a");
+        instance.push("b");
+        instance.push("c");
+
+        List<String> result = instance.asList();
+
+        assertEquals(List.of("c", "b", "a"), result);
+    }
+
 }

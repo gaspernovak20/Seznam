@@ -2,6 +2,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -326,4 +327,25 @@ class BSTTest {
         assertTrue(bst.exists("t"));
         assertFalse(bst.exists("z"));
     }
+
+    @Test
+    void testAsListOnEmpty() {
+        List<String> result = bst.asList();
+
+        assertEquals(List.of(), result);
+    }
+
+
+    @Test
+    void testAsListBasic() {
+        bst.add("b");
+        bst.add("a");
+        bst.add("c");
+
+        List<String> result = bst.asList();
+
+        assertEquals(List.of("a", "b", "c"), result);
+    }
+
+
 }

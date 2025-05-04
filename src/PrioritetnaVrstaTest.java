@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.*;
 
 import java.security.PublicKey;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -254,4 +255,21 @@ public class PrioritetnaVrstaTest {
         assertEquals(5, pv.size());
     }
 
+    @Test
+    void testAsListOnEmpty() {
+        List<String> result = pv.asList();
+
+        assertEquals(List.of(), result);
+    }
+
+    @Test
+    void testAsListBasic() {
+        pv.add("c");
+        pv.add("a");
+        pv.add("b");
+
+        List<String> result = pv.asList();
+
+        assertEquals(List.of("c", "a", "b"), result);
+    }
 }

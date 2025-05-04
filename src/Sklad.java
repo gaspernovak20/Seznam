@@ -1,5 +1,8 @@
 //package ltpo.seznam;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -135,4 +138,16 @@ public class Sklad<T> implements Seznam<T> {
         return size();
     }
 
+    @Override
+    public List<T> asList(){
+        List<T> result = new LinkedList<>();
+
+        Element<T> el = vrh;
+        while (el != null){
+            result.add(el.vrednost);
+            el = el.vezava;
+        }
+
+        return result;
+    }
 }

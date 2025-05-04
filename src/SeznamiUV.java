@@ -85,6 +85,8 @@ public class SeznamiUV {
                     }
                 } else result = "Please specify a string";
                 break;
+            case "asList":
+                result = seznam.asList().toString();
         }
         return result;
     }

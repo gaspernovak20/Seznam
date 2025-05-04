@@ -2,6 +2,8 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.List;
+
 import static java.time.Duration.ofMillis;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -347,5 +349,44 @@ class SeznamiUVTest {
         uv.processInput("add test3");
         assertEquals("Element not found", uv.processInput("remove test4"));
     }
+
+
+    @ParameterizedTest
+    @ValueSource(strings = {"sk", "pv", "bst"})
+    public void testAsListOnEmpty(String seznam) {
+        uv.processInput("use " + seznam);
+        assertEquals("[]", uv.processInput("asList"));
+    }
+
+    @Test
+    void testSkladAsListBasic() {
+        uv.processInput("use sk");
+        uv.processInput("add a");
+        uv.processInput("add b");
+        uv.processInput("add c");
+
+        assertEquals("[c, b, a]", uv.processInput("asList"));
+    }
+
+    @Test
+    void testPQAsListBasic() {
+        uv.processInput("use pv");
+        uv.processInput("add a");
+        uv.processInput("add b");
+        uv.processInput("add c");
+
+        assertEquals("[c, a, b]", uv.processInput("asList"));
+    }
+
+    @Test
+    void testBSTAsListBasic() {
+        uv.processInput("use bst");
+        uv.processInput("add b");
+        uv.processInput("add a");
+        uv.processInput("add c");
+
+        assertEquals("[a, b, c]", uv.processInput("asList"));
+    }
+
 
 }

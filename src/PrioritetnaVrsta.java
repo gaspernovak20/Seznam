@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+import java.util.List;
 
 public class PrioritetnaVrsta<T extends Comparable> implements Seznam<T> {
     private Object[] heap;
@@ -124,4 +126,19 @@ public class PrioritetnaVrsta<T extends Comparable> implements Seznam<T> {
         }
         return false;
     }
+
+    @Override
+    public List<T> asList() {
+        List<T> result = new LinkedList<>();
+        return asListRet(result, 0);
+    }
+
+    private List<T> asListRet(List<T> list, int elIdx) {
+        if (elIdx >= end) return list;
+        list.add((T) heap[elIdx]);
+        list = asListRet(list, elIdx * 2 + 1);
+        list = asListRet(list, elIdx * 2 + 2);
+        return list;
+    }
+
 }

@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static java.lang.Math.max;
@@ -139,5 +141,19 @@ public class BST<T extends Comparable> implements Seznam<T> {
     @Override
     public boolean exists(T e) {
         return member((T) e, root);
+    }
+
+    @Override
+    public List<T> asList() {
+        List<T> result = new LinkedList<>();
+        return asListRet(result, root);
+    }
+
+    private List<T> asListRet(List<T> list, ElementBST el) {
+        if (el == null) return list;
+        list = asListRet(list, el.levi);
+        list.add(el.vrednost);
+        list = asListRet(list, el.desni);
+        return list;
     }
 }
