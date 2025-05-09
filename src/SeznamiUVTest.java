@@ -39,7 +39,7 @@ class SeznamiUVTest {
 
     //    test Add
     @ParameterizedTest
-    @ValueSource(strings = {"sk", "pv", "bst"})
+    @ValueSource(strings = {"sk", "pv", "bst", "23"})
     public void testAddBasic(String seznam) {
         uv.processInput("use " + seznam);
         assertEquals("OK", uv.processInput("add Test1"));
@@ -47,14 +47,14 @@ class SeznamiUVTest {
 
     //    test Add
     @ParameterizedTest
-    @ValueSource(strings = {"sk", "pv", "bst"})
+    @ValueSource(strings = {"sk", "pv", "bst", "23"})
     public void testAddNoArgument(String seznam) {
         uv.processInput("use " + seznam);
         assertEquals("Error: please specify a string", uv.processInput("add"));
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"sk", "pv", "bst"})
+    @ValueSource(strings = {"sk", "pv", "bst", "23"})
     public void testAddMultipleWords(String seznam) {
         uv.processInput("use " + seznam);
         assertEquals("OK", uv.processInput("add \"Test with multiple words\""));
@@ -62,7 +62,7 @@ class SeznamiUVTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"sk", "pv", "bst"})
+    @ValueSource(strings = {"sk", "pv", "bst", "23"})
     public void testAddMultipleWordsWrong(String seznam) {
         uv.processInput("use " + seznam);
         assertEquals("Error: Wrong string", uv.processInput("add \"Test with multiple words"));
@@ -98,7 +98,7 @@ class SeznamiUVTest {
     //  test Reset
 
     @ParameterizedTest
-    @ValueSource(strings = {"sk", "pv", "bst"})
+    @ValueSource(strings = {"sk", "pv", "bst", "23"})
     public void testResetOnEmpty(String seznam) {
         uv.processInput("use " + seznam);
         assertEquals("OK", uv.processInput("reset"));
@@ -116,7 +116,7 @@ class SeznamiUVTest {
 
 
     @ParameterizedTest
-    @ValueSource(strings = {"sk", "pv", "bst"})
+    @ValueSource(strings = {"sk", "pv", "bst", "23"})
     public void testAddCountOne(String seznam) {
         uv.processInput("use " + seznam);
         assertEquals("OK", uv.processInput("add Test"));
@@ -128,7 +128,7 @@ class SeznamiUVTest {
     //    test Exists
 
     @ParameterizedTest
-    @ValueSource(strings = {"sk", "pv", "bst"})
+    @ValueSource(strings = {"sk", "pv", "bst", "23"})
     public void testExistsOnEmpty(String seznam) {
         uv.processInput("use " + seznam);
         assertEquals("Data structure is empty", uv.processInput("exists Test1"));
@@ -136,7 +136,7 @@ class SeznamiUVTest {
 
 
     @ParameterizedTest
-    @ValueSource(strings = {"sk", "pv", "bst"})
+    @ValueSource(strings = {"sk", "pv", "bst", "23"})
     public void testExistsNothing(String seznam) {
         uv.processInput("use " + seznam);
         assertEquals("Please specify a string", uv.processInput("exists"));
@@ -144,7 +144,7 @@ class SeznamiUVTest {
 
 
     @ParameterizedTest
-    @ValueSource(strings = {"sk", "pv", "bst"})
+    @ValueSource(strings = {"sk", "pv", "bst", "23"})
     public void testExistsExistsBasic(String seznam) {
         uv.processInput("use " + seznam);
         uv.processInput("add test1");
@@ -153,7 +153,7 @@ class SeznamiUVTest {
 
 
     @ParameterizedTest
-    @ValueSource(strings = {"sk", "pv", "bst"})
+    @ValueSource(strings = {"sk", "pv", "bst", "23"})
     public void testExistsExistsMultiple(String seznam) {
         uv.processInput("use " + seznam);
         uv.processInput("add test1");
@@ -164,7 +164,7 @@ class SeznamiUVTest {
 
 
     @ParameterizedTest
-    @ValueSource(strings = {"sk", "pv", "bst"})
+    @ValueSource(strings = {"sk", "pv", "bst", "23"})
     public void testExistsDoesntExistsBasic(String seznam) {
         uv.processInput("use " + seznam);
         uv.processInput("add test1");
@@ -173,7 +173,7 @@ class SeznamiUVTest {
 
 
     @ParameterizedTest
-    @ValueSource(strings = {"sk", "pv", "bst"})
+    @ValueSource(strings = {"sk", "pv", "bst", "23"})
     public void testExistsDoesntExistsMultiple(String seznam) {
         uv.processInput("use " + seznam);
         uv.processInput("add test1");
@@ -183,7 +183,7 @@ class SeznamiUVTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"sk", "pv", "bst"})
+    @ValueSource(strings = {"sk", "pv", "bst", "23"})
     public void testGetFirstOnEmpty(String seznam) {
         uv.processInput("use " + seznam);
         assertEquals("Error: Data structure is empty", uv.processInput("getFirst"));
@@ -191,7 +191,7 @@ class SeznamiUVTest {
 
 
     @ParameterizedTest
-    @ValueSource(strings = {"sk", "pv", "bst"})
+    @ValueSource(strings = {"sk", "pv", "bst", "23"})
     public void testGetFirstBasic(String seznam) {
         uv.processInput("use " + seznam);
         uv.processInput("add test1");
@@ -210,7 +210,7 @@ class SeznamiUVTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"bst"})
+    @ValueSource(strings = {"bst", "23"})
     public void testBSTGetFirstMultiple(String seznam) {
         uv.processInput("use " + seznam);
         uv.processInput("add test2");
@@ -221,14 +221,14 @@ class SeznamiUVTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"sk", "pv", "bst"})
+    @ValueSource(strings = {"sk", "pv", "bst", "23"})
     public void testIsEmptyOnEmpty(String seznam) {
         uv.processInput("use " + seznam);
         assertEquals("Data structure is empty", uv.processInput("isEmpty"));
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"sk", "pv", "bst"})
+    @ValueSource(strings = {"sk", "pv", "bst", "23"})
     public void testIsEmptyBasic(String seznam) {
         uv.processInput("use " + seznam);
         uv.processInput("add test1");
@@ -236,7 +236,7 @@ class SeznamiUVTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"sk", "pv", "bst"})
+    @ValueSource(strings = {"sk", "pv", "bst", "23"})
     public void testIsEmptyMultiple(String seznam) {
         uv.processInput("use " + seznam);
         uv.processInput("add test1");
@@ -246,7 +246,7 @@ class SeznamiUVTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"sk", "pv", "bst"})
+    @ValueSource(strings = {"sk", "pv", "bst", "23"})
     public void testDepthOnEmpty(String seznam) {
         uv.processInput("use " + seznam);
         assertEquals("0", uv.processInput("depth"));
@@ -254,7 +254,7 @@ class SeznamiUVTest {
 
 
     @ParameterizedTest
-    @ValueSource(strings = {"pv", "bst"})
+    @ValueSource(strings = {"pv", "bst", "23"})
     public void testDepthBasic(String seznam) {
         uv.processInput("use " + seznam);
         uv.processInput("add test1");
@@ -352,7 +352,7 @@ class SeznamiUVTest {
 
 
     @ParameterizedTest
-    @ValueSource(strings = {"sk", "pv", "bst"})
+    @ValueSource(strings = {"sk", "pv", "bst", "23"})
     public void testAsListOnEmpty(String seznam) {
         uv.processInput("use " + seznam);
         assertEquals("[]", uv.processInput("asList"));
@@ -386,6 +386,16 @@ class SeznamiUVTest {
         uv.processInput("add c");
 
         assertEquals("[a, b, c]", uv.processInput("asList"));
+    }
+
+    @Test
+    void test23AsListBasic() {
+        uv.processInput("use 23");
+        uv.processInput("add b");
+        uv.processInput("add a");
+        uv.processInput("add c");
+
+        assertEquals("[b, a, c]", uv.processInput("asList"));
     }
 
 
